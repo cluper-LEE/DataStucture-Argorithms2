@@ -95,26 +95,33 @@ public class BST {
 	}
 
 	/**
-	 * Delete node r. if r is root of tree, return null.
-	 * 
+	 * Delete node r.
+	 * 삭제 노드의 자식이 있으면 그 노드를 리턴.
+	 * 아니면 삭제 노드의 부모를 리턴
 	 * @param r the node to be deleted
 	 * @return parent of deleted node
 	 */
 	private Node delete(Node r) {
 		if (r.parent == null) { // r=root
 			root = deleteNode(r);
-			return null;
+			return root;
 		} else if (r == r.parent.left) {
 			r.parent.left = deleteNode(r);
+			if(r.parent.left!=null) {
+				return r.parent.left;				
+			}
 			return r.parent;
 		} else {
 			r.parent.right = deleteNode(r);
+			if(r.parent.right!=null) {
+				return r.parent.right;
+			}
 			return r.parent;
 		}
 	}
 
 	/**
-	 * delete node and get parent of deleted node(or successor).
+	 * delete node and get the place of deleted node.
 	 * 
 	 * @param r
 	 * @return
@@ -134,13 +141,8 @@ public class BST {
 		} else { // case 3: 2 children
 			Node s = successor(r);
 			r.key = s.key;
-			// successor just have right child
-			if (s == s.parent.left) {
-				s.parent.left = s.right;
-			} else {
-				s.parent.right = s.right;
-			}
-			return s.parent;
+			delete(s);
+			return r;
 		}
 	}
 

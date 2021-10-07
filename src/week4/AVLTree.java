@@ -41,27 +41,48 @@ public class AVLTree extends BST {
 			}
 		}
 	}
-	
-	public Node delete(char c) {
+
+	public void AVLdelete(char c) {
 		Node x = super.delete(c);
 		Node y = null;
+		Node z = null;
+		Node w = null;
 		
 		while(x!=null) {
 			if (!isBalanced(x)) {
-				break;
-			}
-			x = x.parent;
-		}
-		if (x != null) {
-			if (c < x.key) {
-				rotateLeft(x);
+				if(getHeight(x.left) >= getHeight(x.right)) {
+					y = x.left;
+					if(y.left!=null) {
+						z = y.left;
+						w = rotateRight(x);
+					} else {
+						z = y.right;
+						rotateLeft(y);
+						w = rotateRight(x);
+					}
+				}
+				else {
+					y = x.right;
+					if(y.left!=null) {
+						z = y.left;
+						rotateRight(y);
+						w = rotateLeft(x);
+					} else {
+						z = y.right;
+						w = rotateLeft(x);
+					}
+				}
+				if(w.parent == null) {
+					root = w;
+				}
+				x = w.parent;
 			} else {
-				rotateRight(x);
+				x = x.parent;
 			}
 		}
-		return null;
 	}
 
+	
 	private Node rotateLeft(Node x) {
 		Node y = x.right;
 		y.parent = x.parent;
@@ -148,14 +169,16 @@ public class AVLTree extends BST {
 		System.out.println("no AVL");
 		bt.showTree();
 		System.out.println("AVL");
-		bt1.delete('Q'); 
-		bt1.delete('S'); 
-		bt1.delete('R');
-		bt1.delete('A');
-		bt1.delete('C');
-		bt1.delete('E');
-		bt1.delete('G');
-		bt1.delete('B');
+		bt1.AVLdelete('Q'); 
+		bt1.AVLdelete('S'); 
+		bt1.AVLdelete('R');
+		bt1.AVLdelete('A');
+		bt1.AVLdelete('C');
+		bt1.AVLdelete('E');
+		bt1.AVLdelete('G');
+		bt1.AVLdelete('B');
+		bt1.showTree();
+		bt1.AVLdelete('P');
 		bt1.showTree();
 	}
 }
